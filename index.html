@@ -150,6 +150,12 @@
 
 			var tasks = [];
 
+		document.getElementById("add-task").addEventListener('keypress', function(event) {
+			if (event.key = 'Enter') {
+				addTask();
+			}
+		});
+
 		document.getElementById("add-task").addEventListener('click', addTask);
 		document.getElementById("clear-list").addEventListener('click', function() {
 			tasks = [];
@@ -163,7 +169,12 @@
 			
 			console.log('adding a task...' + newTask.value );
 
-			tasks.push(newTask.value);
+			tasks.push({
+				id: Date.now(),
+				name: newTask.value,
+				status: false,
+				created: new Date()
+			});
 
 			newTask.value = '';
 
@@ -188,16 +199,24 @@
 				taskDone.type = 'checkbox';
 				taskDone.addEventListener('change', function(event) {
 					if (event.target.checked) {
+						task.status = true;
 						event.target.nextSibling.classList.add('done');
 					}
 					else {
+						task.status = false;
 						event.target.nextSibling.classList.remove('done');
 					}
 				});
 
+				let taskId = document.createElement
+
 				let taskText = document.createElement('span');
 				taskText.classList.add('task-item');
-				taskText.innerText = task;
+				if (task.status == true) {
+					taskText.classList.add('done');
+					taskDone.checked = true;
+				}
+				taskText.innerText = task.name + ", created at: " + toShortTime(task.created) + ", + toShortDate(task.created);
 
 				let taskRemove = document.createElement('button');
 				taskRemove.innerText = 'Remove';
@@ -223,12 +242,48 @@
 
 		}
 
+		function toPrettyDate(date) {
+			return toShortDate(date) + "" + toShortTime(date);
+		}
+
+		funciton toShortDate(date) {
+			let month = date.getMonth() + 1;
+			let day = date.getDate();
+			let year = date.getFullYear();
+
+			let shortDate = month + "/" + day + "/" + year;
+			return shortDate;
+		}
+
+		function toShortTime(date) {
+			let hours = date.getHours();
+			let minutes = date.getMinutes();
+			let seconds = date.getSeconds();
+			let ampm = "am";
+
+			if (hours > 12) {
+				hours -= 12;
+				ampm = "pm";
+			}
+
+			if (minutes <10) {
+				minutes = "0" + minutes;
+			}
+
+			if (seconds < 10) {
+				seconds = "0" + seconds;
+			}
+
+			let time = hour + ":" + minutes + ":" + seconds + "" + ampm;
+			return time;
+		}
+
 		function removeTask(event) {
 
 			// console.log(event.target.previousSibling.innerText);
 
 			tasks = tasks.filter(function(task) {
-				if (task == event.target.previousSibling.innerText) {
+				if (task.id = event.) {
 					return false;
 				}
 				else {
